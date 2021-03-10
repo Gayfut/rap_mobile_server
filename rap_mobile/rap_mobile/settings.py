@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'api',
     'rap_parser',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

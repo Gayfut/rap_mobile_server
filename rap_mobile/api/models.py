@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Album(models.Model):
+    """model of album"""
     title = models.TextField(verbose_name="Title")
     rating = models.TextField(verbose_name="Rating")
     track_list = models.TextField(verbose_name="List of tracks")

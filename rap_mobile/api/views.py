@@ -6,6 +6,7 @@ from .models import Album
 
 
 class AlbumViewSet(viewsets.ModelViewSet):
+    """view for album in api"""
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     queryset = Album.objects.all().order_by('title')

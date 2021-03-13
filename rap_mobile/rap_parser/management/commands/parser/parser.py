@@ -19,6 +19,7 @@ from api.models import Album
 
 
 class WebParser:
+    """control parser and specification"""
     def __init__(self):
         self.__browser = webdriver.Firefox(options=self.__set_options())
 
@@ -31,6 +32,7 @@ class WebParser:
         return options
 
     def start_parse(self, count=None):
+        """open site and start parsing"""
         self.__open_site()
 
         for _step in range(count):
@@ -42,6 +44,7 @@ class WebParser:
             print(_step)
 
     def __next_page(self):
+        """open next page for parsing"""
         self.__browser.find_element_by_xpath(next_page_xpath).click()
 
     def __open_site(self):
@@ -49,6 +52,7 @@ class WebParser:
         self.__browser.get(link_to_site)
 
     def __get_links(self):
+        """return links to albums"""
         elements_for_links = self.__browser.find_elements_by_css_selector(
             for_links_selector
         )
@@ -71,6 +75,7 @@ class WebParser:
         return links
 
     def __save_info_about_albums(self, links):
+        """save info about all albums"""
         self.__browser.execute_script("window.open('');")
         self.__browser.switch_to.window(self.__browser.window_handles[1])
 
@@ -81,20 +86,9 @@ class WebParser:
         self.__browser.switch_to.window(self.__browser.window_handles[0])
 
     def __save_info_about_album(self, link):
+        """save info about one definite album"""
         self.__browser.get(link)
 
-        info_about_album = {
-            "title": self.__browser.find_element_by_css_selector(title_selector).text,
-            "rating": self.__browser.find_element_by_css_selector(
-                rating_selector
-            ).get_attribute(rating_attribute),
-            "track_list": self.__browser.find_element_by_css_selector(
-                track_list_selector
-            ).text,
-            "link_to_download": self.__browser.find_element_by_css_selector(
-                link_to_download_selector
-            ).get_attribute(link_to_download_attribute),
-        }
         try:
             album = Album.objects.get(link_to_album=link)
         except Album.DoesNotExist:
@@ -113,4 +107,5 @@ class WebParser:
             album.save()
 
     def stop_parse(self):
+        """stop parsing and close browser"""
         self.__browser.quit()
